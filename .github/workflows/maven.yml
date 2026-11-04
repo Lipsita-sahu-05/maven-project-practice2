@@ -7,8 +7,6 @@ branches:
 
 workflow_dispatch:
 
-# OIDC Permissions
-
 permissions:
 id-token: write
 contents: read
@@ -16,6 +14,7 @@ contents: read
 jobs:
 build:
 runs-on: ubuntu-latest
+
 
 steps:
   - name: Checkout Code
@@ -36,7 +35,8 @@ steps:
     with:
       role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
       aws-region: ${{ vars.AWS_REGION }}
+      audience: sts.amazonaws.com
 
   - name: Upload JAR to S3
-    run: aws s3 cp target/*.jar s3://${{ vars.S3_BUCKET }}/app.jar
-```
+    run: |
+      aws s3 cp target/*.jar s3://${{ vars.S3_BUCKET }}/app.jar
